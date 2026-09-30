@@ -1,0 +1,41 @@
+name: Fix Archivo J image assets
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-archivo-j-assets.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  decode-images:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode base64 image assets
+        shell: python
+        run: |
+          import base64, pathlib
+          pairs = [
+              ("archivo-j/assets/anunnaki.b64","archivo-j/assets/anunnaki.webp"),
+              ("archivo-j/assets/padre-venezuela.b64","archivo-j/assets/padre-venezuela.webp"),
+          ]
+          for src,dst in pairs:
+              s = pathlib.Path(src).read_text(encoding="utf-8")
+              s = "".join(s.split())
+              s += "=" * (-len(s) % 4)
+              data = base64.b64decode(s, validate=True)
+              if not (data.startswith(b"RIFF") and data[8:12] == b"WEBP"):
+                  raise RuntimeError(f"{src} did not decode to WebP")
+              pathlib.Path(dst).write_bytes(data)
+              print(src, "->", dst, len(data), "bytes")
+      - name: Commit repaired images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add archivo-j/assets/anunnaki.webp archivo-j/assets/padre-venezuela.webp
+          git diff --cached --quiet || git commit -m "Repair Archivo J image binaries"
+          git push
