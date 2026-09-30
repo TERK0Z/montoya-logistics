@@ -106,15 +106,15 @@
         <p class="evidence">Estos montajes forman parte de la broma. No son fotografías documentales ni pretenden demostrar hechos reales.</p>
         <div class="evidence-gallery">
           <figure class="evidence-shot">
-            <img id="img-anunnaki" alt="Montaje humorístico ficticio de temática Anunnaki" />
+            <img id="img-anunnaki" src="assets/anunnaki.webp" alt="Montaje humorístico ficticio de temática Anunnaki" />
             <figcaption><b>ANEXO A — VECTOR ANUNNAKI.</b> Comparativa visual completamente inventada para el expediente.</figcaption>
           </figure>
           <figure class="evidence-shot">
-            <img id="img-venezuela" alt="Montaje humorístico ficticio de la supuesta conexión venezolana" />
+            <img id="img-venezuela" src="assets/padre-venezuela.webp" alt="Montaje humorístico ficticio de la supuesta conexión venezolana" />
             <figcaption><b>ANEXO B — CONEXIÓN VENEZUELA.</b> Recreación ficticia del delirante Proyecto Baguette Caribeña.</figcaption>
           </figure>
         </div>
-        <div id="image-status" class="load-note">Cargando anexos clasificados...</div>
+        <div id="image-status" class="load-note">ANEXOS CARGADOS // clasificación: parodia</div>
       </article>
       <article class="card">
         <div class="case">GENERADOR DE VERDADES</div><h2>Revelación aleatoria</h2>
@@ -156,22 +156,6 @@
     function reveal(){document.getElementById('reveal').textContent=truths[Math.floor(Math.random()*truths.length)]}
     const threats=[['AREPA 5','Vigilancia recomendada: observar si pide baguette y arepa en la misma comida.'],['ANUNNAKI MODERADO','No mirar fijamente a los jeroglíficos durante más de 12 segundos.'],['FRANCIA COMPROMETIDA','París ha sido informado, aunque París no sabe de qué estamos hablando.'],['BAGUETTE ROJA','Protocolo máximo: esconder el queso y apagar Google Maps.']];
     let ti=0;function cycleThreat(){ti=(ti+1)%threats.length;document.getElementById('threat').textContent=threats[ti][0];document.getElementById('threatText').textContent=threats[ti][1]}
-  </script>
-<script>
-    (async()=>{
-      const pairs=[["assets/anunnaki.b64","img-anunnaki"],["assets/padre-venezuela.b64","img-venezuela"]];
-      try{
-        await Promise.all(pairs.map(async([src,id])=>{
-          const r=await fetch(src,{cache:"force-cache"});
-          if(!r.ok) throw new Error(src+" "+r.status);
-          const b64=(await r.text()).trim();
-          document.getElementById(id).src="data:image/webp;base64,"+b64;
-        }));
-        document.getElementById("image-status").textContent="ANEXOS CARGADOS // clasificación: parodia";
-      }catch(e){
-        document.getElementById("image-status").textContent="Error cargando anexos. Consulta los assets del expediente.";
-      }
-    })();
   </script>
 </body>
 </html>
