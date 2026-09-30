@@ -44,6 +44,15 @@
     footer{padding:42px 0;text-align:center;color:#728077;font-size:13px}
     @media(max-width:760px){.card{grid-column:1/-1}.board{min-height:470px}.photo{left:5%;top:55px}.note.n1{right:5%;top:20px}.note.n2{right:5%;bottom:22px}.s1,.s2{display:none}.topbar .wrap{align-items:flex-start}.stamp{font-size:11px}}
   </style>
+<style>
+    .evidence-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}
+    .evidence-shot{background:#050706;border:1px solid #294632;padding:10px;position:relative;overflow:hidden}
+    .evidence-shot:before{content:"FICCIÓN / MONTAJE";position:absolute;z-index:2;top:18px;left:-34px;transform:rotate(-38deg);background:#a51f2c;color:#fff;padding:5px 42px;font-weight:900;font-size:11px;letter-spacing:1px}
+    .evidence-shot img{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:#000;filter:sepia(.15) contrast(1.05)}
+    .evidence-shot figcaption{padding:10px 4px 2px;color:#aebbb1;font-size:13px}
+    .load-note{color:#708178;font-size:12px;margin-top:8px}
+    @media(max-width:760px){.evidence-gallery{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <div class="topbar"><div class="wrap"><div class="brand">ARCHIVO J // UNIDAD 17</div><div class="stamp">PARODIA · FICCIÓN</div></div></div>
@@ -91,6 +100,22 @@
           <div><span class="year">2026</span> — Dos investigadores con demasiado tiempo libre conectan definitivamente todos los puntos.</div>
         </div>
       </article>
+      <article class="card full">
+        <div class="case">ANEXO FOTOGRÁFICO // MATERIAL MANIPULADO</div>
+        <h2>Las “pruebas” que faltaban</h2>
+        <p class="evidence">Estos montajes forman parte de la broma. No son fotografías documentales ni pretenden demostrar hechos reales.</p>
+        <div class="evidence-gallery">
+          <figure class="evidence-shot">
+            <img id="img-anunnaki" alt="Montaje humorístico ficticio de temática Anunnaki" />
+            <figcaption><b>ANEXO A — VECTOR ANUNNAKI.</b> Comparativa visual completamente inventada para el expediente.</figcaption>
+          </figure>
+          <figure class="evidence-shot">
+            <img id="img-venezuela" alt="Montaje humorístico ficticio de la supuesta conexión venezolana" />
+            <figcaption><b>ANEXO B — CONEXIÓN VENEZUELA.</b> Recreación ficticia del delirante Proyecto Baguette Caribeña.</figcaption>
+          </figure>
+        </div>
+        <div id="image-status" class="load-note">Cargando anexos clasificados...</div>
+      </article>
       <article class="card">
         <div class="case">GENERADOR DE VERDADES</div><h2>Revelación aleatoria</h2>
         <p>Pulsa para obtener una conclusión científicamente indefendible.</p>
@@ -131,6 +156,22 @@
     function reveal(){document.getElementById('reveal').textContent=truths[Math.floor(Math.random()*truths.length)]}
     const threats=[['AREPA 5','Vigilancia recomendada: observar si pide baguette y arepa en la misma comida.'],['ANUNNAKI MODERADO','No mirar fijamente a los jeroglíficos durante más de 12 segundos.'],['FRANCIA COMPROMETIDA','París ha sido informado, aunque París no sabe de qué estamos hablando.'],['BAGUETTE ROJA','Protocolo máximo: esconder el queso y apagar Google Maps.']];
     let ti=0;function cycleThreat(){ti=(ti+1)%threats.length;document.getElementById('threat').textContent=threats[ti][0];document.getElementById('threatText').textContent=threats[ti][1]}
+  </script>
+<script>
+    (async()=>{
+      const pairs=[["assets/anunnaki.b64","img-anunnaki"],["assets/padre-venezuela.b64","img-venezuela"]];
+      try{
+        await Promise.all(pairs.map(async([src,id])=>{
+          const r=await fetch(src,{cache:"force-cache"});
+          if(!r.ok) throw new Error(src+" "+r.status);
+          const b64=(await r.text()).trim();
+          document.getElementById(id).src="data:image/webp;base64,"+b64;
+        }));
+        document.getElementById("image-status").textContent="ANEXOS CARGADOS // clasificación: parodia";
+      }catch(e){
+        document.getElementById("image-status").textContent="Error cargando anexos. Consulta los assets del expediente.";
+      }
+    })();
   </script>
 </body>
 </html>
